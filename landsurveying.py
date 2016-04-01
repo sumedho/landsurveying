@@ -47,7 +47,8 @@ def dec2dms(decdeg):
     return(dms)
 
 def gauss_kruger( latitude, longitude, central_meridian, proj):
-    
+    """ Convert lat,long to projected coordinates
+    """
     # Change lat/long to decimal degrees and convert to radians
     rlat = math.radians(dms2dec(latitude))
     rlong = math.radians(dms2dec(longitude))
@@ -158,16 +159,29 @@ def gauss_kruger( latitude, longitude, central_meridian, proj):
 
     return(easting, northing, m, grid_conv)
 
+def join2d(pnt1, pnt2):
+    """ Calculate bearing and distance from one point to the next
+    """
+    delta_n = pnt2.y - pnt1.y
+    delta_e = pnt2.x - pnt1.x
+    
+    distance = math.sqrt(math.pow(delta_n, 2) + math.pow(delta_e, 2))
+    
+    bearing = math.degrees(math.atan2(delta_e, delta_n)) % 360
 
-#proj = projection(6378137.0,298.257222101,0.9996,500000,10000000)
-#(e,n,m,gc) = gauss_kruger(-37.570372030,144.252952442,147,proj)
-
-#print(e)
-#print(n)
-#print(m)
-#print(gc)
-
-
+    if bearing < 0:
+        bearing += 360
+    
+    return(distance, bearing)
+    
+def rad2d(pnt, bearing, distance):
+     """ Calculate x,y given inital starting point, bearing and distance
+    """
+    x = pnt.x + distance * math.sin(math.radians(dms2dec(bearing)))
+    y = pnt.y + distance * math.cos(math.radians(dms2dec(bearing)))
+    
+    return(x, y)
+    
 class projection:
     def __init__(self, a, invf, m0, false_easting, false_northing):
         self.a = a # ellipsoid semi-major axis

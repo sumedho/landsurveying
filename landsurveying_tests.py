@@ -39,6 +39,21 @@ class test_decimal_conversions(unittest.TestCase):
     
     def test4(self):
         self.assertEqual(round(ls.dec2dms(-359.999722222),4), -359.5959)
+        
+"""
+ 2D join tests
+"""
+class test_join2d(unittest.TestCase):
+    def test1(self):
+        point1 = ls.point2d(32255.751, 49076.286)
+        point2 = ls.point2d(12231.864, 36939.667)
+        (dist, bearing) = ls.join2d(point1, point2)
+        
+        expected_distance = 23414.815
+        expected_bearing = 238.4647 # In dd.mmss
+        
+        self.assertEqual(round(dist, 3), expected_distance)
+        self.assertEqual(round(ls.dec2dms(bearing),4), expected_bearing)
 
 """
  Gauss Kruger Tests
