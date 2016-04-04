@@ -6,12 +6,13 @@ Created on Thu Mar 31 14:32:32 2016
 """
 
 import unittest
-import landsurveying as ls
+import landsurvey as ls
 
-"""
- Conversion of dd.mmss to decimal degrees tests
-"""
-class test_dms_conversions(unittest.TestCase):
+
+class TestDmsConversions(unittest.TestCase):
+    """
+     Conversion of dd.mmss to decimal degrees tests
+    """
     def test1(self):
         self.assertEqual(round(ls.dms2dec(20.3040),9), 20.511111111)
         
@@ -24,10 +25,11 @@ class test_dms_conversions(unittest.TestCase):
     def test4(self):
         self.assertEqual(round(ls.dms2dec(-359.5959),9), -359.999722222)
 
-"""
- Conversion of decimal degrees to dd.mmss tests
-"""
-class test_decimal_conversions(unittest.TestCase):
+
+class TestDecimalConversions(unittest.TestCase):
+    """
+     Conversion of decimal degrees to dd.mmss tests
+    """
     def test1(self):
         self.assertEqual(round(ls.dec2dms(20.511111111),4), 20.3040)
     
@@ -40,13 +42,14 @@ class test_decimal_conversions(unittest.TestCase):
     def test4(self):
         self.assertEqual(round(ls.dec2dms(-359.999722222),4), -359.5959)
         
-"""
- 2D join tests
-"""
-class test_join2d(unittest.TestCase):
+
+class TestJoin2d(unittest.TestCase):
+    """
+     2D join tests
+    """
     def test1(self):
-        point1 = ls.point2d(32255.751, 49076.286)
-        point2 = ls.point2d(12231.864, 36939.667)
+        point1 = ls.Point2d(32255.751, 49076.286)
+        point2 = ls.Point2d(12231.864, 36939.667)
         (dist, bearing) = ls.join2d(point1, point2)
         
         expected_distance = 23414.815
@@ -55,10 +58,11 @@ class test_join2d(unittest.TestCase):
         self.assertEqual(round(dist, 3), expected_distance)
         self.assertEqual(round(ls.dec2dms(bearing),4), expected_bearing)
 
-"""
- Gauss Kruger Tests
-"""
-class test_gauss_kruger(unittest.TestCase):
+
+class TestGaussKruger(unittest.TestCase):
+    """
+     Gauss Kruger Tests
+    """
     def test1(self):
         """
             Test of converting lat, long to MGA using Coordinates of Flinders Peak
@@ -70,7 +74,7 @@ class test_gauss_kruger(unittest.TestCase):
         m0 = 0.9996
         false_easting = 500000
         false_northing = 10000000
-        p = ls.projection(a, invf, m0, false_easting, false_northing)
+        p = ls.Projection(a, invf, m0, false_easting, false_northing)
         
         # Flinders peak coordinates in lat,long MGA94 zone 55 == 147
         lat = -37.570372030
@@ -97,7 +101,7 @@ class test_gauss_kruger(unittest.TestCase):
         m0 = 0.9996
         false_easting = 500000
         false_northing = 10000000
-        p = ls.projection(a, invf, m0, false_easting, false_northing)
+        p = ls.Projection(a, invf, m0, false_easting, false_northing)
         
         # Bunninyong peak coordinates in lat,long MGA94 zone 55 == 147
         lat = -37.391015611
@@ -124,7 +128,7 @@ class test_gauss_kruger(unittest.TestCase):
         m0 = 0.9996
         false_easting = 500000
         false_northing = 10000000
-        p = ls.projection(a, invf, m0, false_easting, false_northing)
+        p = ls.Projection(a, invf, m0, false_easting, false_northing)
         
         # Smeaton peak coordinates in lat,long MGA94 zone 55 == 147
         lat = -37.174973137
@@ -151,7 +155,7 @@ class test_gauss_kruger(unittest.TestCase):
         m0 = 0.9996
         false_easting = 500000
         false_northing = 10000000
-        p = ls.projection(a, invf, m0, false_easting, false_northing)
+        p = ls.Projection(a, invf, m0, false_easting, false_northing)
         
         # Bellarine peak coordinates in lat,long MGA94 zone 55 == 147
         lat = -38.090522718
@@ -178,7 +182,7 @@ class test_gauss_kruger(unittest.TestCase):
         m0 = 0.9996
         false_easting = 500000
         false_northing = 10000000
-        p = ls.projection(a, invf, m0, false_easting, false_northing)
+        p = ls.Projection(a, invf, m0, false_easting, false_northing)
         
         # Arthurs Seat coordinates in lat,long MGA94 zone 55 == 147
         lat = -38.211312687
