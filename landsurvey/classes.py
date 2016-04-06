@@ -6,8 +6,9 @@ class Projection:
         self.false_easting = false_easting # false easting
         self.false_northing = false_northing # false northing
 
+
 class Point2d:
-    def __init__(self, x, y, code = None):
+    def __init__(self, x, y, code=None):
         if code is None:
             self.x = x
             self.y = y
@@ -16,8 +17,9 @@ class Point2d:
             self.y = y
             self.code = code
 
+
 class Point3d:
-    def __init__(self, x, y, z, code = None):
+    def __init__(self, x, y, z, code=None):
         if code is None:
             self.x = x
             self.y = y

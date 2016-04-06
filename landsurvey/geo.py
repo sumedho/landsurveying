@@ -1,6 +1,7 @@
 import math
 from conversion import dms2dec
 
+
 def gauss_kruger( latitude, longitude, central_meridian, proj):
     """ Convert lat,long to projected coordinates
     """
@@ -17,21 +18,21 @@ def gauss_kruger( latitude, longitude, central_meridian, proj):
 
     # Calculate geometrical constants
     f = 1.0/invf
-    b = a * (1-f) # semi - minor axis
+    b = a * (1-f)  # semi - minor axis
 
     # Eccentricity
-    e2 = 2 * f - f * f # = f*(2-f) = (a^2-b^2)/a^2
+    e2 = 2 * f - f * f  # = f*(2-f) = (a^2-b^2)/a^2
     e = math.sqrt(e2)
 
     # Compute 3rd flattening and powers
     n = (a - b)/(a + b)
-    n2 =  n * n
-    n3 =  n * n2
-    n4 =  n2 * n2
-    n5 =  n3 * n2
-    n6 =  n2 * n4
-    n7 =  n4 * n3
-    n8 =  n4 * n4
+    n2 = n * n
+    n3 = n * n2
+    n4 = n2 * n2
+    n5 = n3 * n2
+    n6 = n2 * n4
+    n7 = n4 * n3
+    n8 = n4 * n4
 
     # Rectifying Radius A
     A = (a/(1+n)) * (1+(1.0/4.0) * n2 + (1.0/64) * n4 + (1.0/256) * n6 + (25.0/16384) * n8)
@@ -40,7 +41,7 @@ def gauss_kruger( latitude, longitude, central_meridian, proj):
     sigma = math.sinh( e*math.atanh(( e * math.tan(rlat)) / (math.sqrt( 1 + math.tan(rlat) * math.tan(rlat)))))
     conformal_lat = math.tan(rlat) * math.sqrt(1 + sigma * sigma)- sigma * math.sqrt(1 + math.tan(rlat) * math.tan(rlat))
 
-    #Compute the coefficients
+    # Compute the coefficients
     a2 = (1.0/2) * n - (2.0/3) * n2 + (5.0/16) * n3 + (41.0/180) * n4 - (127.0/288) * n5 + (7891.0/37800) * n6 + (72161.0/387072) * n7 - (18975107.0/50803200) * n8
     a4 = (13.0/48) * n2 - (3.0/5) * n3 + (557.0/1440) * n4 + (281.0/630) * n5 - (1983433.0/1935360) * n6 + (13769.0/28800) * n7 + (148003883.0/174182400) * n8
     a6 = (61.0/240) * n3 - (103.0/140) * n4 + (15061.0/26880) * n5 + (167603.0/181440) * n6 - (67102379.0/29030400) * n7 + (79682431.0/79833600) * n8
@@ -104,7 +105,7 @@ def gauss_kruger( latitude, longitude, central_meridian, proj):
 
     grid_conv = math.atan( q/ p)+math.atan(( conformal_lat*math.tan( w))/math.sqrt(1+ conformal_lat* conformal_lat))*180/math.pi
 
-    # Calculate coodinates
+    # Calculate coordinates
     X = A*(( v/ a)+ a2* x1+ a4* x2+ a6* x3+ a8* x4+ a10* x5+ a12* x6+ a14* x7+ a16* x8)
     Y = A*(( u/ a)+ a2* y1+ a4* y2+ a6* y3+ a8* y4+ a10* y5+ a12* y6+ a14* y7+ a16* y8)
 
@@ -112,4 +113,4 @@ def gauss_kruger( latitude, longitude, central_meridian, proj):
     easting = false_easting + m0 * X
     northing = false_northing + m0 * Y
 
-    return(easting, northing, m, grid_conv)
+    return easting, northing, m, grid_conv
