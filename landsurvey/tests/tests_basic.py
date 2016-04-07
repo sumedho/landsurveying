@@ -123,7 +123,7 @@ class TestRad2d(unittest.TestCase):
 
 class TestBearingBearingIntersection(unittest.TestCase):
     """
-        2D rad tests
+        bearing bearing intersection tests
     """
     def test1(self):
         pnt_a = ls.Point2d(422145.515, 1817938.975)
@@ -151,6 +151,49 @@ class TestBearingBearingIntersection(unittest.TestCase):
         self.assertAlmostEquals(x, expected_x, places=3)
         self.assertAlmostEquals(y, expected_y, places=3)
 
+
+class TestDistanceDistanceIntersection(unittest.TestCase):
+    """
+        distance distance intersection tests
+    """
+    def test1(self):
+        pnt_a = ls.Point2d(1859.75, 3722.63)
+        pnt_b = ls.Point2d(1078.37, 2405.38)
+        dist_ac = 1537.75
+        dist_bc = 2487.56
+
+        expected_x1 = 850.038
+        expected_y1 = 4882.439
+        expected_x2 = 3361.660
+        expected_y2 = 3392.568
+
+        (x1, y1, x2, y2) = ls.distance_distance_intersection(pnt_a, pnt_b, dist_ac, dist_bc)
+
+        self.assertAlmostEquals(x1, expected_x1, places=3)
+        self.assertAlmostEquals(y1, expected_y1, places=3)
+        self.assertAlmostEquals(x2, expected_x2, places=3)
+        self.assertAlmostEquals(y2, expected_y2, places=3)
+
+
+class TestTwoLineIntersection(unittest.TestCase):
+    """
+        two line intersection tests
+    """
+    def test1(self):
+        pnt_a = ls.Point2d(1101.61, 1113.14)
+        pnt_b = ls.Point2d(1134.86, 1061.14)
+        pnt_c = ls.Point2d(1334.91, 1098.36)
+        pnt_d = ls.Point2d(1358.31, 1211.90)
+        (x, y) = ls.two_line_intersection(pnt_a, pnt_b, pnt_c, pnt_d)
+        print(x, y)
+
+    def test2(self):
+        pnt_a = ls.Point2d(74184.946, 5404.450)
+        pnt_b = ls.Point2d(74204.945, 5404.450)
+        pnt_c = ls.Point2d(74185.176, 5399.176)
+        pnt_d = ls.Point2d(74205.176, 5399.176)
+        (x, y) = ls.two_line_intersection(pnt_a, pnt_b, pnt_c, pnt_d)
+        print(x, y)
 
 class TestGaussKruger(unittest.TestCase):
     """
