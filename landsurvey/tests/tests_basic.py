@@ -7,6 +7,7 @@ Created on Thu Mar 31 14:32:32 2016
 
 import unittest
 import landsurvey as ls
+import numpy as np
 
 
 class TestDmsConversions(unittest.TestCase):
@@ -27,6 +28,51 @@ class TestDmsConversions(unittest.TestCase):
 
     def test5(self):
         self.assertAlmostEquals(ls.dms2dec(-2.1524), -2.256666667, places=9)
+
+
+class TestReducedLevel(unittest.TestCase):
+    """
+        Reduced levels tests
+    """
+    def test1(self):
+        expected_rl = 9768.483
+        rl1 = ls.reduced_level(9768.442, 0, 14.993, 90.1025, 0)
+        rl2 = ls.reduced_level(9769.500, 0, 67.775, 89.0812, 0)
+        calculated_rl = (rl1 + rl2)/2
+
+        self.assertAlmostEquals(expected_rl, calculated_rl, places=3)
+
+    def test2(self):
+        expected_rl = 9912.771
+        rl1 = ls.reduced_level(9913.080, 0, 18.149, 89.0135, 0)
+        rl2 = ls.reduced_level(9913.090, 0, 4.346, 85.4656, 0)
+        calculated_rl = (rl1 + rl2) / 2
+
+        self.assertAlmostEquals(expected_rl, calculated_rl, places=3)
+
+    def test3(self):
+        expected_rl = 9098.347
+        rl1 = ls.reduced_level(9106.898, 0, 58.717, 81.3740, 0)
+        rl2 = ls.reduced_level(9099.070, 0, 3.991, 79.3153, 0)
+        calculated_rl = (rl1 + rl2) / 2
+
+        self.assertAlmostEquals(expected_rl, calculated_rl, places=3)
+
+    def test4(self):
+        expected_rl = 9379.118
+        rl1 = ls.reduced_level(9380.967, 0, 70.089, 88.2957, 0)
+        rl2 = ls.reduced_level(9378.352, 0, 69.772, 90.3708, 0)
+        calculated_rl = (rl1 + rl2) / 2
+
+        self.assertAlmostEquals(expected_rl, calculated_rl, places=3)
+
+    def test5(self):
+        expected_rl = 9379.788
+        rl1 = ls.reduced_level(9379.183, 0, 22.730, 91.3136, 0)
+        rl2 = ls.reduced_level(9379.765, 0, 8.570, 90.0905, 0)
+        calculated_rl = (rl1 + rl2) / 2
+
+        self.assertAlmostEquals(expected_rl, calculated_rl, places=3)
 
 
 class TestDecimalConversions(unittest.TestCase):
@@ -185,7 +231,7 @@ class TestTwoLineIntersection(unittest.TestCase):
         pnt_c = ls.Point2d(1334.91, 1098.36)
         pnt_d = ls.Point2d(1358.31, 1211.90)
         (x, y) = ls.two_line_intersection(pnt_a, pnt_b, pnt_c, pnt_d)
-        print(x, y)
+        #print(x, y)
 
     def test2(self):
         pnt_a = ls.Point2d(74184.946, 5404.450)
@@ -193,7 +239,39 @@ class TestTwoLineIntersection(unittest.TestCase):
         pnt_c = ls.Point2d(74185.176, 5399.176)
         pnt_d = ls.Point2d(74205.176, 5399.176)
         (x, y) = ls.two_line_intersection(pnt_a, pnt_b, pnt_c, pnt_d)
-        print(x, y)
+        #print(x, y)
+
+
+class TestLeastSquaresResection(unittest.TestCase):
+    """
+        Least squares resection tests
+    """
+    def test1(self):
+        # two points in vector form
+        # x, y, dist, bearing(dms)
+        point_a = [11813.150, 54078.732, 18.147, 188.2100]
+        point_b = [11834.832, 54079.154, 4.334, 329.1659]
+
+        expected_x = 11831.105
+        expected_y = 54081.366
+
+        # create matrix of data
+        #   | xa ya da ba |
+        #   | xb yb db bb |
+        data = np.vstack([point_a, point_b])
+
+        # least squares resection based on the 2 points
+        # xu = unknown point x value
+        # yu = unknown point y value
+        # v = variance matrix
+        # cnt = number of iterations till convergence
+        xu, yu, v, cnt = ls.freestation_2point(data)
+
+        self.assertAlmostEquals(expected_x, xu, places=3)
+        self.assertAlmostEquals(expected_y, yu, places=3)
+
+
+
 
 class TestGaussKruger(unittest.TestCase):
     """

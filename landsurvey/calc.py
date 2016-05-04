@@ -3,7 +3,15 @@ from conversion import dms2dec, dec2dms
 
 
 def join2d(pnt1, pnt2):
-    """ Calculate bearing and distance from one point to the next
+    """ Calculate bearing and distance from point 1 to point 2
+
+        Args:
+            pnt1 (Point2d class): first point
+            pnt2 (Point2d class): second point
+
+        Returns:
+            distance: the distance between points
+            bearing: the bearing in degrees, minutes, seconds (dd.mmss)
     """
     delta_n = pnt2.y - pnt1.y
     delta_e = pnt2.x - pnt1.x
@@ -19,7 +27,16 @@ def join2d(pnt1, pnt2):
 
 
 def rad2d(pnt, bearing, distance):
-    """ Calculate x,y given inital starting point, bearing and distance
+    """ Calculate the new point x,y given initial starting point, bearing and distance
+
+        Args:
+            pnt (Point2d class):  The starting point
+            bearing (floating point): The bearing in degrees, minutes, seconds (dd.mmss)
+            distance (floating point): The distance
+
+        Returns:
+             x: x value of new point
+             y: y value of new point
     """
     x = pnt.x + distance * math.sin(math.radians(dms2dec(bearing)))
     y = pnt.y + distance * math.cos(math.radians(dms2dec(bearing)))
@@ -27,15 +44,41 @@ def rad2d(pnt, bearing, distance):
     return x, y
 
 
-def rad3d(pnt, bearing, slope_distance, zenith_angle, height_instrument, height_target):
+def reduced_level(rla, hi, sd, za, ht):
+    """ Calculates a reduced level
+
+        Args:
+            rla: reduced level of point a
+            hi: height of instrument
+            sd: slope distance
+            za: zenith angle in dd.mmss (degrees, minutes, seconds)
+            ht: height of target
+
+        Returns:
+            rlb: The reduced level at point b
     """
-        Calculate x,y,z given inital starting point and 3d vector
-        pnt: 3d point with x, y and z
-        bearing: the bearing in dd.mmss
-        slope_distance: measured slope distance
-        zenith angle: zenith angle
-        height_instrument: height of instrument
-        height_target: height of target
+    za = math.radians(dms2dec(za))
+    delta = -1 * (hi + sd*math.cos(za) - ht)
+    rlb = rla + delta
+
+    return rlb
+
+
+def rad3d(pnt, bearing, slope_distance, zenith_angle, height_instrument, height_target):
+    """ Calculate x,y,z given inital starting point and 3d vector
+
+        Args:
+            pnt (Point3d class): 3d point with x, y and z
+            bearing: the bearing in degrees, minutes, seconds (dd.mmss)
+            slope_distance: measured slope distance
+            zenith_angle: zenith angle in degrees, minutes and seconds (dd.mmss)
+            height_instrument: height of instrument
+            height_target: height of target
+
+        Returns:
+            x: x value of new point
+            y: y value of new point
+            z: z value of new point
     """
     horizontal_distance = slope_distance * math.sin(math.radians(dms2dec(zenith_angle)))
     x = pnt.x + horizontal_distance * math.sin(math.radians(dms2dec(bearing)))
@@ -45,10 +88,17 @@ def rad3d(pnt, bearing, slope_distance, zenith_angle, height_instrument, height_
 
 
 def bearing_bearing_intersection(pnt_a, pnt_b, bearing_a, bearing_b):
-    """
-        Calculate position C given:
-        point A and bearing to C from A
-        point B and bearing to C from B
+    """ Calculate point c using a two bearings intersection:
+
+        Args:
+            pnt_a (Point2d class): point a
+            pnt_b (Point2d class): point b
+            bearing_a: bearing from a to c in degrees, minutes, seconds (dd.mmss)
+            bearing_b: bearing from b to c in degrees, minutes, seconds (dd.mmss)
+
+        Returns:
+            x: x position of c
+            y: y position of c
     """
     bc = math.tan(math.radians(dms2dec(bearing_b)))
     ac = math.tan(math.radians(dms2dec(bearing_a)))
@@ -59,12 +109,22 @@ def bearing_bearing_intersection(pnt_a, pnt_b, bearing_a, bearing_b):
 
 
 def distance_distance_intersection(pnt_a, pnt_b, dist_ac, dist_bc):
-    """
-        Calculate position C given:
-        point A and distance to C from A
-        point B and distance to C from B
+    """ Calculate point c using a two bearings intersection
 
-        Uses Intersection of two circles algorithm
+        Returns the two calculated intersection points. It is
+        up to the end user to decide which one they want.
+
+        Args:
+            pnt_a (Point2d class): point a
+            pnt_b (Point2d class): point b
+            dist_ac: distance from a to c
+            dist_bc: distance from b to c
+
+        Returns:
+            x1: first x position of c
+            y1: first y position of c
+            x2: second x position of c
+            y2: second y position of c
     """
     d2 = math.pow((pnt_b.x - pnt_a.x),2) + math.pow((pnt_b.y-pnt_a.y),2)
     d = math.sqrt(d2)
@@ -84,11 +144,20 @@ def distance_distance_intersection(pnt_a, pnt_b, dist_ac, dist_bc):
 
 
 def two_line_intersection(pnt_a, pnt_b, pnt_c, pnt_d):
-    """
-        Calculate the intersection of two lines given four points a, b, c, d
+    """ Calculate the intersection of two lines given four points a, b, c, d
 
         If the lines do not intersect, then the string "NA" is returned for both x and y
         otherwise the intersection points x, y are returned
+
+        Args:
+            pnt_a (Point class): point a
+            pnt_b (Point class): point b
+            pnt_c (Point class): point c
+            pnt_d (Point class): point d
+
+        Returns:
+            x: x-intersection or 'NA'
+            y: y-intersection or 'NA'
     """
     denominator = (pnt_a.x - pnt_b.x) * (pnt_c.y - pnt_d.y) - (pnt_a.y - pnt_b.y) * (pnt_c.x - pnt_d.x)
 
