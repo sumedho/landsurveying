@@ -2,7 +2,7 @@ import math
 from conversion import dms2dec
 
 
-def gauss_kruger( latitude, longitude, central_meridian, proj):
+def gauss_kruger(latitude, longitude, central_meridian, proj):
     """ Convert lat,long to projected coordinates
     """
     # Change lat/long to decimal degrees and convert to radians
