@@ -1,3 +1,48 @@
+# BEARING_CONVENTION is a constant which defines the type of bearing convention used.
+# 1 = degrees, minutes, seconds (dd.mmss)
+# 2 = North American quadrants (Ndd.mmssE)
+# 3 = gradians
+
+import math
+
+BEARING_CONVENTION = 1
+
+def convert_to_radians(bearing):
+    """ Converts bearing to radians based on BEARING_CONVENTION
+    """
+
+    # degrees, minutes, seconds
+    if BEARING_CONVENTION == 1:
+        radians = math.radians(dms2dec(bearing))
+        return(radians)
+
+    # quadrants
+    if BEARING_CONVENTION == 2:
+        bearing = list(bearing)
+        quad1 = bearing.pop(0) # Grab the first quadrant off front
+        quad2 = bearing.pop(-1) # Grab second quadrant off back
+        bearing = float(''.join(bearing)) # Convert remaining to a float number
+        dec = dms2dec(bearing) # Convert to decimal degrees
+
+        if quad1 == 'N' and quad2 == 'E':
+            radians = math.radians(dec)
+
+        if quad1 == 'S' and quad2 == 'E':
+            radians = math.radians(180 - dec)
+
+        if quad1 == 'S' and quad2 == 'W':
+            radians = math.radians(180 + dec)
+
+        if quad1 == 'N' and quad2 == 'W':
+            radians = math.radians(360 - dec)
+
+        return(radians)
+
+    # gradians
+    if BEARING_CONVENTION == 3:
+        radians = bearing * (math.pi/200)
+        return(radians)
+
 def dms2dec(dms):
     """ Convert dd.mmss to decimal degrees
     """
