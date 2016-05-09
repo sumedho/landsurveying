@@ -1,5 +1,5 @@
 import math
-from conversion import dms2dec, dec2dms
+from conversion import dms2dec, dec2dms, radians_to_bearing, bearing_to_radians
 
 
 def join2d(pnt1, pnt2):
@@ -23,7 +23,8 @@ def join2d(pnt1, pnt2):
     if bearing < 0:
         bearing += 360
 
-    return distance, dec2dms(bearing)
+    bearing = math.radians(bearing)
+    return distance, radians_to_bearing(bearing)
 
 
 def rad2d(pnt, bearing, distance):
@@ -38,8 +39,8 @@ def rad2d(pnt, bearing, distance):
              x: x value of new point
              y: y value of new point
     """
-    x = pnt.x + distance * math.sin(math.radians(dms2dec(bearing)))
-    y = pnt.y + distance * math.cos(math.radians(dms2dec(bearing)))
+    x = pnt.x + distance * math.sin(bearing_to_radians(bearing))
+    y = pnt.y + distance * math.cos(bearing_to_radians(bearing))
 
     return x, y
 
@@ -81,8 +82,8 @@ def rad3d(pnt, bearing, slope_distance, zenith_angle, height_instrument, height_
             z: z value of new point
     """
     horizontal_distance = slope_distance * math.sin(math.radians(dms2dec(zenith_angle)))
-    x = pnt.x + horizontal_distance * math.sin(math.radians(dms2dec(bearing)))
-    y = pnt.y + horizontal_distance * math.cos(math.radians(dms2dec(bearing)))
+    x = pnt.x + horizontal_distance * math.sin(bearing_to_radians(bearing))
+    y = pnt.y + horizontal_distance * math.cos(bearing_to_radians(bearing))
     z = pnt.z + height_instrument + (slope_distance * math.cos(math.radians(dms2dec(zenith_angle)))) - height_target
     return x, y, z
 
@@ -100,8 +101,8 @@ def bearing_bearing_intersection(pnt_a, pnt_b, bearing_a, bearing_b):
             x: x position of c
             y: y position of c
     """
-    bc = math.tan(math.radians(dms2dec(bearing_b)))
-    ac = math.tan(math.radians(dms2dec(bearing_a)))
+    bc = math.tan(bearing_to_radians(bearing_b))
+    ac = math.tan(bearing_to_radians(bearing_a))
     y = pnt_a.y + ((pnt_b.y - pnt_a.y) * bc - (pnt_b.x - pnt_a.x))/(bc - ac)
     x = pnt_a.x + (y - pnt_a.y) * ac
 

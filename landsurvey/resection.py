@@ -1,5 +1,5 @@
 import math
-from conversion import dms2dec, dec2dms
+from conversion import bearing_to_radians
 import numpy as np
 
 
@@ -52,7 +52,7 @@ def freestation_2point(data):
         a1 = 0
 
     # Calculate the interior angle from resection point A to point B
-    ang_uab = math.radians(dms2dec(az_b)) - math.radians(dms2dec(az_a))
+    ang_uab = bearing_to_radians(az_b) - bearing_to_radians(az_a)
     b = math.asin(dist_au * math.sin(ang_uab)/dist_ab)
     a = math.asin(dist_bu * math.sin(ang_uab)/dist_ab)
 
@@ -98,8 +98,8 @@ def freestation_2point(data):
         k2 = dist_bu - bu
 
         # Calculate the k values for angles
-        k3 = math.radians(dms2dec(az_a)) - (math.atan2((xa - xu), (ya - yu)))
-        k4 = math.radians(dms2dec(az_b)) - (math.atan2((xb - xu), (yb - yu)))
+        k3 = bearing_to_radians(az_a) - (math.atan2((xa - xu), (ya - yu)))
+        k4 = bearing_to_radians(az_b) - (math.atan2((xb - xu), (yb - yu)))
 
         # create the J and K matrices using the calculated values
         j = np.matrix([[j11, j12], [j21, j22], [j31, j32], [j41, j42]])
@@ -124,6 +124,5 @@ def freestation_2point(data):
             v = (j * x) - k  # variance matrix
             break
         cnt = cnt + 1
-
 
     return xu, yu, v, cnt
