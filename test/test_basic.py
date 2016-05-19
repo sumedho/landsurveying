@@ -7,6 +7,7 @@ Created on Thu Mar 31 14:32:32 2016
 
 import unittest
 import landsurvey as ls
+
 import numpy as np
 
 
@@ -14,19 +15,19 @@ class TestDmsConversions(unittest.TestCase):
     """
      Conversion of dd.mmss to decimal degrees tests
     """
-    def test1(self):
+    def test_dms2dec1(self):
         self.assertAlmostEquals(ls.dms2dec(20.3040), 20.511111111, places=9)
         
-    def test2(self):
+    def test_dms2dec2(self):
         self.assertAlmostEquals(ls.dms2dec(342.2630), 342.441666667, places=9)
         
-    def test3(self):
+    def test_dms2dec3(self):
         self.assertAlmostEquals(ls.dms2dec(180.0101), 180.016944444, places=9)
     
-    def test4(self):
+    def test_dms2dec4(self):
         self.assertAlmostEquals(ls.dms2dec(-359.5959), -359.999722222, places=9)
 
-    def test5(self):
+    def test_dms2dec5(self):
         self.assertAlmostEquals(ls.dms2dec(-2.1524), -2.256666667, places=9)
 
 
@@ -34,7 +35,7 @@ class TestReducedLevel(unittest.TestCase):
     """
         Reduced levels tests
     """
-    def test1(self):
+    def test_rl1(self):
         expected_rl = 9768.483
         rl1 = ls.reduced_level(9768.442, 0, 14.993, 90.1025, 0)
         rl2 = ls.reduced_level(9769.500, 0, 67.775, 89.0812, 0)
@@ -42,7 +43,7 @@ class TestReducedLevel(unittest.TestCase):
 
         self.assertAlmostEquals(expected_rl, calculated_rl, places=3)
 
-    def test2(self):
+    def test_rl2(self):
         expected_rl = 9912.771
         rl1 = ls.reduced_level(9913.080, 0, 18.149, 89.0135, 0)
         rl2 = ls.reduced_level(9913.090, 0, 4.346, 85.4656, 0)
@@ -50,7 +51,7 @@ class TestReducedLevel(unittest.TestCase):
 
         self.assertAlmostEquals(expected_rl, calculated_rl, places=3)
 
-    def test3(self):
+    def test_rl3(self):
         expected_rl = 9098.347
         rl1 = ls.reduced_level(9106.898, 0, 58.717, 81.3740, 0)
         rl2 = ls.reduced_level(9099.070, 0, 3.991, 79.3153, 0)
@@ -58,7 +59,7 @@ class TestReducedLevel(unittest.TestCase):
 
         self.assertAlmostEquals(expected_rl, calculated_rl, places=3)
 
-    def test4(self):
+    def test_rl4(self):
         expected_rl = 9379.118
         rl1 = ls.reduced_level(9380.967, 0, 70.089, 88.2957, 0)
         rl2 = ls.reduced_level(9378.352, 0, 69.772, 90.3708, 0)
@@ -66,7 +67,7 @@ class TestReducedLevel(unittest.TestCase):
 
         self.assertAlmostEquals(expected_rl, calculated_rl, places=3)
 
-    def test5(self):
+    def test_rl5(self):
         expected_rl = 9379.788
         rl1 = ls.reduced_level(9379.183, 0, 22.730, 91.3136, 0)
         rl2 = ls.reduced_level(9379.765, 0, 8.570, 90.0905, 0)
@@ -79,19 +80,19 @@ class TestDecimalConversions(unittest.TestCase):
     """
      Conversion of decimal degrees to dd.mmss tests
     """
-    def test1(self):
+    def test_dec2dms1(self):
         self.assertAlmostEquals(ls.dec2dms(20.511111111), 20.3040, places=4)
     
-    def test2(self):
+    def test_dec2dms2(self):
         self.assertAlmostEquals(ls.dec2dms(342.441666667), 342.2630, places=4)
         
-    def test3(self):
+    def test_dec2dms3(self):
         self.assertAlmostEquals(ls.dec2dms(180.016944444), 180.0101, places=4)
     
-    def test4(self):
+    def test_dec2dms4(self):
         self.assertAlmostEquals(ls.dec2dms(-359.999722222), -359.5959, places=4)
 
-    def test5(self):
+    def test_dec2dms5(self):
         self.assertAlmostEquals(ls.dec2dms(-2.256666667), -2.1524, places=9)
         
 
@@ -99,7 +100,7 @@ class TestJoin2d(unittest.TestCase):
     """
      2D join tests
     """
-    def test1(self):
+    def test_2d_join1(self):
         point1 = ls.Point2d(32255.751, 49076.286)
         point2 = ls.Point2d(12231.864, 36939.667)
         (dist, bearing) = ls.join2d(point1, point2)
@@ -115,7 +116,7 @@ class TestRad3d(unittest.TestCase):
     """
         3D rad tests
     """
-    def test1(self):
+    def test_rad3d1(self):
         point = ls.Point3d(255.751, 176.286, 42.623)
         height_instrument = 1.565
         height_target = 1.690
@@ -132,7 +133,7 @@ class TestRad3d(unittest.TestCase):
         self.assertAlmostEquals(y, expected_y, places=3)
         self.assertAlmostEquals(z, expected_z, places=3)
 
-    def test2(self):
+    def test_rad3d2(self):
         point = ls.Point3d(301.245, 299.215, 35.214)
         height_instrument = 1.565
         height_target = 1.690
@@ -154,7 +155,7 @@ class TestRad2d(unittest.TestCase):
     """
         2D rad tests
     """
-    def test1(self):
+    def test_rad2d1(self):
         point = ls.Point2d(177413.0, 446111.0)
         bearing = 12.3015  # dd.mmss
         distance = 6235.42
@@ -171,7 +172,7 @@ class TestBearingBearingIntersection(unittest.TestCase):
     """
         bearing bearing intersection tests
     """
-    def test1(self):
+    def test_bearing_intersection1(self):
         pnt_a = ls.Point2d(422145.515, 1817938.975)
         pnt_b = ls.Point2d(398112.145, 1828011.324)
         bearing_ac = 237.14216
@@ -184,7 +185,7 @@ class TestBearingBearingIntersection(unittest.TestCase):
         self.assertAlmostEquals(x, expected_x, places=3)
         self.assertAlmostEquals(y, expected_y, places=3)
 
-    def test2(self):
+    def test_bearing_intersection2(self):
         pnt_a = ls.Point2d(2589.40, 6717.85)
         pnt_b = ls.Point2d(9307.04, 3423.63)
         bearing_ac = 62.2658
@@ -271,13 +272,11 @@ class TestLeastSquaresResection(unittest.TestCase):
         self.assertAlmostEquals(expected_y, yu, places=3)
 
 
-
-
 class TestGaussKruger(unittest.TestCase):
     """
      Gauss Kruger Tests
     """
-    def test1(self):
+    def test_flinders_peak(self):
         """
             Test of converting lat, long to MGA using Coordinates of Flinders Peak
             Taken from Page 46 of GDA Technical Manual 2.3
@@ -304,7 +303,7 @@ class TestGaussKruger(unittest.TestCase):
         self.assertAlmostEquals(n, expected_n, places=3)
         self.assertAlmostEquals(k, expected_k, places=3)
         
-    def test2(self):
+    def test_bunninyong_peak(self):
         """
             Test of converting lat, long to MGA using Coordinates of Bunninyong Peak
             Taken from Page 46 of GDA Technical Manual 2.3
@@ -331,7 +330,7 @@ class TestGaussKruger(unittest.TestCase):
         self.assertAlmostEquals(n, expected_n, places=3)
         self.assertAlmostEquals(k, expected_k, places=3)
         
-    def test3(self):
+    def test_smeaton_peak(self):
         """
             Test of converting lat, long to MGA using Coordinates of Smeaton Peak
             Taken from Page 46 of GDA Technical Manual 2.3
@@ -358,7 +357,7 @@ class TestGaussKruger(unittest.TestCase):
         self.assertAlmostEquals(n, expected_n, places=3)
         self.assertAlmostEquals(k, expected_k, places=3)
         
-    def test4(self):
+    def test_bellarine(self):
         """
             Test of converting lat, long to MGA using Coordinates of Bellarine
             Taken from Page 46 of GDA Technical Manual 2.3
@@ -385,7 +384,7 @@ class TestGaussKruger(unittest.TestCase):
         self.assertAlmostEquals(n, expected_n, places=3)
         self.assertAlmostEquals(k, expected_k, places=3)
         
-    def test5(self):
+    def test_arthurs_seat(self):
         """
             Test of converting lat, long to MGA using Coordinates of Arthurs Seat
             Taken from Page 46 of GDA Technical Manual 2.3
